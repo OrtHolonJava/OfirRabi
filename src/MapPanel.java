@@ -54,7 +54,7 @@ public class MapPanel extends JPanel {
 		_blocks[10]=_snowMan;
 		_sign=new Img("images\\sign.png", 0, 0, _blockSize, _blockSize);
 		_blocks[11]=_sign;
-	//	_map = new Map(_size, _sizeW, _mapFile);
+		_map = new Map(_size, _sizeW, _mapFile);
 	}
 
 	@Override

@@ -1,8 +1,9 @@
-import java.awt.Graphics;
 
+import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import images.Img;
+
 import map.Map;
 
 public class MapPanel extends JPanel {
@@ -22,24 +23,38 @@ public class MapPanel extends JPanel {
 	private Img _snowMan;
 	private Img _sign;
 	private Map _map;
-
+	private String _mapFile;
+	private Img _blocks[];
 	public MapPanel() {
-		_size = 15;
-		_sizeW = 37;
-		_blockSize = 60;
+		_mapFile ="Maps\\map.xml";
+		_size = Map.getElementCountByName(_mapFile,"Line");
+		_sizeW = Map.getElementCountByName(_mapFile,"Area")/_size;
+		_blockSize = 40;
+		_blocks=new Img[12];
 		_imgBackgound = new Img("images\\background.png", 0, 0, _sizeW * _blockSize, _size * _blockSize);
 		_floorBlock = new Img("images\\floor.png", 0, 0, _blockSize, _blockSize);
+		_blocks[3]=_floorBlock;
 		_topBlock = new Img("images\\top.png", 0, 0, _blockSize, _blockSize);
+		_blocks[2]=_topBlock;
 		_iceBlock = new Img("images\\ice.png", 0, 0, _blockSize, _blockSize);
+		_blocks[5]=_iceBlock;
 		_stoneBlock = new Img("images\\stone.png", 0, 0, _blockSize, _blockSize);
+		_blocks[4]=_stoneBlock;
 		_insideBlock = new Img("images\\inside.png", 0, 0, _blockSize, _blockSize);
+		_blocks[1]=_insideBlock;
 		_waterButtomBlock = new Img("images\\waterButtom.png", 0, 0, _blockSize, _blockSize);
+		_blocks[9]=_waterButtomBlock;
 		_waterTopBlock = new Img("images\\waterTop.png", 0, 0, _blockSize, _blockSize);
+		_blocks[7]=_waterTopBlock;
 		_crystalBlock=new Img("images\\crystal.png", 0, 0, _blockSize, _blockSize);
+		_blocks[8]=_crystalBlock;
 		_crateBlock=new Img("images\\crate.png", 0, 0, _blockSize, _blockSize);
+		_blocks[6]=_crateBlock;
 		_snowMan=new Img("images\\snowMan.png", 0, 0, _blockSize, _blockSize);
+		_blocks[10]=_snowMan;
 		_sign=new Img("images\\sign.png", 0, 0, _blockSize, _blockSize);
-		//_map = new Map(_size, _sizeW, "Maps\\file1.xml");
+		_blocks[11]=_sign;
+	//	_map = new Map(_size, _sizeW, _mapFile);
 	}
 
 	@Override
@@ -48,52 +63,10 @@ public class MapPanel extends JPanel {
 		_imgBackgound.drawImg(g);
 		for (int i = 0; i < _size; i++) {
 			for (int j = 0; j < _sizeW; j++) {
-				if (_map.get_map()[i][j]
-						== 1) {
-					_floorBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_floorBlock.drawImg(g);
+				if (_map.get_map()[i][j]!= 0) {
+					_blocks[_map.get_map()[i][j]].setImgCords((j * _blockSize), (i) * _blockSize);
+					_blocks[_map.get_map()[i][j]].drawImg(g);
 				}
-				if (_map.get_map()[i][j] == 2) {
-					_topBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_topBlock.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 3) {
-					_iceBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_iceBlock.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 4) {
-					_stoneBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_stoneBlock.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 5) {
-					_insideBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_insideBlock.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 6) {
-					_waterButtomBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_waterButtomBlock.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 7) {
-					_waterTopBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_waterTopBlock.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 8) {
-					_crystalBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_crystalBlock.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 9) {
-					_crateBlock.setImgCords((j * _blockSize), (i) * _blockSize);
-					_crateBlock.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 10) {
-					_snowMan.setImgCords((j * _blockSize), (i) * _blockSize);
-					_snowMan.drawImg(g);
-				}
-				if (_map.get_map()[i][j] == 11) {
-					_sign.setImgCords((j * _blockSize), (i) * _blockSize);
-					_sign.drawImg(g);
-				}
-
 			}
 		}
 	}

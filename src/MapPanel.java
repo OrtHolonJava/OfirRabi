@@ -1,12 +1,18 @@
 
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.JPanel;
 
 import images.Img;
 
 import map.Map;
 
-public class MapPanel extends JPanel {
+public class MapPanel extends JPanel implements KeyListener {
+	private int x = 0, y = 0, velX = 0, velY = 0;
 	private int _size;
 	private int _sizeW;
 	private int _blockSize;
@@ -64,10 +70,75 @@ public class MapPanel extends JPanel {
 		for (int i = 0; i < _size; i++) {
 			for (int j = 0; j < _sizeW; j++) {
 				if (_map.get_map()[i][j]!= 0) {
-					_blocks[_map.get_map()[i][j]].setImgCords((j * _blockSize), (i) * _blockSize);
+					_blocks[_map.get_map()[i][j]].setImgCords((j+velX) * _blockSize, i * _blockSize);
 					_blocks[_map.get_map()[i][j]].drawImg(g);
 				}
 			}
 		}
 	}
+
+    public void up(){
+        velY += -2;
+        velX = 0;
+    }
+
+    public void down(){
+        velY += 2;
+        velX = 0;
+    }
+
+    public void left(){
+        velX += 2;
+        velY = 0;
+    }
+
+    public void right(){
+        velX += -2;
+        velY = 0;
+    }
+
+    public void keyPressed(KeyEvent e){
+        int code = e.getKeyCode();
+
+        if (code == KeyEvent.VK_UP){
+            up();
+        }
+
+        if (code == KeyEvent.VK_DOWN){
+            down();
+        }
+
+        if (code == KeyEvent.VK_LEFT&&velX<0){
+            left();
+        }
+
+        if (code == KeyEvent.VK_RIGHT){
+            right();
+        }
+        repaint();
+    }
+
+    public void keyTyped(KeyEvent e){}
+
+    public void keyReleased(KeyEvent e){
+
+//      velX = 0;
+//      velY = 0;
+        int code = e.getKeyCode();
+
+        if (code == KeyEvent.VK_UP){
+            velY += 0;
+        }
+        if (code == KeyEvent.VK_DOWN){
+            velY += 0;
+        }
+        if (code == KeyEvent.VK_LEFT){
+            velX += 0;
+        }
+        if (code == KeyEvent.VK_RIGHT){
+            velX += 0;
+        }
+    }
+
 }
+

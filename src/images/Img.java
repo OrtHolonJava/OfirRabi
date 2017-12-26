@@ -43,6 +43,14 @@ public class Img
 		this.x = x;
 		this.y = y;
 	}
+	public int getX()
+	{
+		return this.x;
+	}
+	public int getY()
+	{
+		return this.y;
+	}
 	/**
 	 * set the size of the img
 	 * @param width

@@ -39,7 +39,7 @@ public class MapPanel extends JPanel {
 		_crateBlock=new Img("images\\crate.png", 0, 0, _blockSize, _blockSize);
 		_snowMan=new Img("images\\snowMan.png", 0, 0, _blockSize, _blockSize);
 		_sign=new Img("images\\sign.png", 0, 0, _blockSize, _blockSize);
-		_map = new Map(_size, _sizeW, "Maps\\file1.xml");
+		//_map = new Map(_size, _sizeW, "Maps\\file1.xml");
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 
 import java.awt.Graphics;
 import java.awt.MouseInfo;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -8,15 +9,20 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.sql.Time;
+import java.util.LinkedList;
+import java.util.Timer;
 
 import javax.swing.JPanel;
+import javax.swing.text.DefaultEditorKit.BeepAction;
 
 import images.Img;
 
 import map.Map;
 
-public class MapPanel extends JPanel implements KeyListener {
-	private int refreshRate = 1, velX = 0, velY = 0;
+public class MapPanel extends JPanel implements KeyListener,ActionListener {
+	private javax.swing.Timer _timer; 
+	private int refreshRateX = 5, refreshRateY = -refreshRateX, velX = 0, velY = 0;
 	private int _size;
 	private int _sizeW;
 	private int _blockSize;
@@ -32,12 +38,16 @@ public class MapPanel extends JPanel implements KeyListener {
 	private Img _crateBlock;
 	private Img _snowMan;
 	private Img _sign;
+	private Img _player;
 	private Map _map;
 	private String _mapFile;
 	private Img _blocks[];
+	private LinkedList<Rectangle> _stopers;
 
 	public MapPanel() {
-
+		_timer=new javax.swing.Timer(30, this);
+		
+		_stopers = new LinkedList<Rectangle>();
 		_mapFile = "Maps\\map.xml";
 		_size = Map.getElementCountByName(_mapFile, "Line");
 		_sizeW = Map.getElementCountByName(_mapFile, "Area") / _size;
@@ -67,74 +77,73 @@ public class MapPanel extends JPanel implements KeyListener {
 		_sign = new Img("images\\sign.png", 0, 0, _blockSize, _blockSize);
 		_blocks[11] = _sign;// sign to continue
 		_map = new Map(_size, _sizeW, _mapFile);
+		_player = new Img("images\\player.png", 0, 0, _blockSize, _blockSize);
 		addMouseMotionListener(new MouseMotionListener() {
-			
+
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				// TODO Auto-generated method stub
 				repaint();
 			}
-			
+
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				// TODO Auto-generated method stub
 				repaint();
 			}
 		});
+		_timer.start();
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-			g.translate((int)-MouseInfo.getPointerInfo().getLocation().getX(), 0);
-			_imgBackgound.drawImg(g);
-			for (int i = 0; i < _size; i++) {
-				for (int j = 0; j < _sizeW; j++) {
-					if (_map.get_map()[i][j] != 0) {
-						_blocks[_map.get_map()[i][j]].setImgCords(j * _blockSize, i * _blockSize);
-						_blocks[_map.get_map()[i][j]].drawImg(g);
-					}
+		_stopers.clear();
+		g.translate((int) -_player.getX(), 0);
+		_imgBackgound.drawImg(g);
+		for (int i = 0; i < _size; i++) {
+			for (int j = 0; j < _sizeW; j++) {
+				if (_map.get_map()[i][j] != 0) {
+					_blocks[_map.get_map()[i][j]].setImgCords(j * _blockSize, i * _blockSize);
+					_blocks[_map.get_map()[i][j]].drawImg(g);
+					Rectangle e = new Rectangle(j * _blockSize,i * _blockSize, _blockSize, _blockSize);
+					_stopers.add(e);
 				}
 			}
+		}
+		_player.setImgCords(velX, 12 * _blockSize + velY);
+		_player.drawImg(g);
+
 	}
 
-	public void up() {
-		velY += -refreshRate;
-		velX = 0;
+	public void move() {
+		velX += refreshRateX;
+		velY += refreshRateY;
+		Rectangle e = new Rectangle(_player.getX(), _player.getY(), _blockSize, _blockSize);
+		for (int i=0;i<_stopers.size();i++) {
+			//System.out.println(_stopers);
+			if (!_stopers.get(i).intersection(e).isEmpty()) {
+				velX-=refreshRateX;
+				velY-=refreshRateY;
+				break;
+			}
+		}
+		repaint();
 	}
 
-	public void down() {
-		velY += refreshRate;
-		velX = 0;
-	}
-
-	public void left() {
-		velX += refreshRate;
-		velY = 0;
-	}
-
-	public void right() {
-		velX += -refreshRate;
-		velY = 0;
+	public void space() {
+		refreshRateY *= -1;
 	}
 
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
 
-		if (code == KeyEvent.VK_UP) {
-			up();
+		if (code == KeyEvent.VK_SPACE) {
+			space();
 		}
-
-		if (code == KeyEvent.VK_DOWN) {
-			down();
-		}
-
-		if (code == KeyEvent.VK_LEFT && velX <= 0) {
-			left();
-		}
-
-		if (code == KeyEvent.VK_RIGHT && velX > -(_sizeW * _blockSize - 5)) {
-			right();
+		if(code==KeyEvent.VK_ESCAPE)
+		{
+			_timer.stop();
 		}
 		repaint();
 
@@ -146,19 +155,14 @@ public class MapPanel extends JPanel implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		int code = e.getKeyCode();
 
-		if (code == KeyEvent.VK_UP) {
-			velY += 0;
-		}
-		if (code == KeyEvent.VK_DOWN) {
-			velY += 0;
-		}
-		if (code == KeyEvent.VK_LEFT) {
-			velX += 0;
-		}
-		if (code == KeyEvent.VK_RIGHT) {
-			velX += 0;
+		if (code == KeyEvent.VK_SPACE) {
+			// refreshRateY*=-1;
 		}
 	}
 
-	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		move();
+	}
+
 }

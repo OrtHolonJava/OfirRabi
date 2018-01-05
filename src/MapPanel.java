@@ -99,7 +99,7 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		_stopers.clear();
-		g.translate((int) -_player.getX(), 0);
+		g.translate((int) -_player.getX()+_sizeW, 0);
 		_imgBackgound.drawImg(g);
 		for (int i = 0; i < _size; i++) {
 			for (int j = 0; j < _sizeW; j++) {
@@ -123,8 +123,24 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		for (int i=0;i<_stopers.size();i++) {
 			//System.out.println(_stopers);
 			if (!_stopers.get(i).intersection(e).isEmpty()) {
-				velX-=refreshRateX;
-				velY-=refreshRateY;
+				if(_stopers.get(i).getX()>=e.getX())
+				{
+					velX-=refreshRateX;
+				}
+				if(_stopers.get(i).getY()<=e.getY())
+				{
+					if(refreshRateY<0)
+					{
+						velY-=refreshRateY;
+					}
+				}
+				if(_stopers.get(i).getY()>=e.getY())
+				{
+					if(refreshRateY>0)
+					{
+						velY-=refreshRateY;
+					}
+				}
 				break;
 			}
 		}

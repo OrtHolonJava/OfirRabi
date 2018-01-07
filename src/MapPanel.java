@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.Console;
 import java.sql.Time;
 import java.util.LinkedList;
 import java.util.Timer;
@@ -22,7 +23,7 @@ import map.Map;
 
 public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	private javax.swing.Timer _timer; 
-	private int refreshRateX = 5, refreshRateY = -refreshRateX, velX = 0, velY = 0;
+	private int _refreshRateX = 5, _refreshRateY = _refreshRateX, _velX = 0, _velY = 0;
 	private int _size;
 	private int _sizeW;
 	private int _blockSize;
@@ -103,52 +104,69 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		_imgBackgound.drawImg(g);
 		for (int i = 0; i < _size; i++) {
 			for (int j = 0; j < _sizeW; j++) {
-				if (_map.get_map()[i][j] != 0) {
+				if (_map.get_map()[i][j] != 0 && (j*_blockSize)-_player.getX()>-10*_blockSize) {
 					_blocks[_map.get_map()[i][j]].setImgCords(j * _blockSize, i * _blockSize);
+					//System.out.println("here"+j * _blockSize);
 					_blocks[_map.get_map()[i][j]].drawImg(g);
 					Rectangle e = new Rectangle(j * _blockSize,i * _blockSize, _blockSize, _blockSize);
 					_stopers.add(e);
 				}
 			}
 		}
-		_player.setImgCords(velX, 12 * _blockSize + velY);
+		_player.setImgCords(_velX, 12 * _blockSize + _velY);
 		_player.drawImg(g);
 
 	}
 
+	public boolean inPlayerRadius(double x,double y )
+	{
+		if((Math.sqrt((Math.pow(x-_player.getX(), 2.0)+Math.pow(y-_player.getY(), 2.0)))/_blockSize<50))
+		{
+			//System.out.println(y);
+			System.out.println(Math.sqrt((Math.pow(x-_player.getX(), 2.0)+Math.pow(y-_player.getY(), 2.0)))/_blockSize);
+			//System.out.println("asdf");
+			return true;
+		}
+		return false;
+	}
 	public void move() {
-		velX += refreshRateX;
-		velY += refreshRateY;
+		
+		_velX += _refreshRateX;
+		_velY += _refreshRateY;
 		Rectangle e = new Rectangle(_player.getX(), _player.getY(), _blockSize, _blockSize);
+		//System.out.println(e.getY());
 		for (int i=0;i<_stopers.size();i++) {
-			//System.out.println(_stopers);
 			if (!_stopers.get(i).intersection(e).isEmpty()) {
-				if(_stopers.get(i).getX()>=e.getX())
+				if(_stopers.get(i).getX()>e.getX())
 				{
-					velX-=refreshRateX;
+					_velX-=_refreshRateX;
 				}
-				if(_stopers.get(i).getY()<=e.getY())
+				if(_stopers.get(i).getY()<e.getY())
 				{
-					if(refreshRateY<0)
+				
+					if(_refreshRateY<0)
 					{
-						velY-=refreshRateY;
+						System.out.println("1");
+						_velY-=_refreshRateY;
 					}
 				}
 				if(_stopers.get(i).getY()>=e.getY())
 				{
-					if(refreshRateY>0)
-					{
-						velY-=refreshRateY;
+					if(_refreshRateY>0)
+					{	
+						System.out.println("2");
+
+						_velY-=_refreshRateY;
 					}
 				}
-				break;
+				//break;
 			}
 		}
 		repaint();
 	}
 
 	public void space() {
-		refreshRateY *= -1;
+		_refreshRateY *= -1;
 	}
 
 	public void keyPressed(KeyEvent e) {

@@ -10,7 +10,7 @@ public class MapFrame extends JFrame {
 		_map=new MapPanel();
 		add(_map);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    setSize(2000, 1000);
+	    setSize(2000, 750);
 	    setVisible(true);
 	    this.addKeyListener(_map);
 	    _map.move();

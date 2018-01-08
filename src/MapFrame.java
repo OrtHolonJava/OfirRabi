@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 public class MapFrame extends JFrame {
 
 	private MapPanel _map;
-	private PlayerMotion _motion;
 	public MapFrame()
 	{
 		_map=new MapPanel();

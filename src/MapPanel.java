@@ -46,13 +46,13 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	private LinkedList<Rectangle> _stopers;
 
 	public MapPanel() {
-		_timer=new javax.swing.Timer(10, this);
+		_timer=new javax.swing.Timer(20, this);
 		
 		_stopers = new LinkedList<Rectangle>();
 		_mapFile = "Maps\\map.xml";
 		_size = Map.getElementCountByName(_mapFile, "Line");
 		_sizeW = Map.getElementCountByName(_mapFile, "Area") / _size;
-		_blockSize = 40;
+		_blockSize = 50;
 		_blocks = new Img[12];
 		_imgBackgound = new Img("images\\background.png", 0, 0, _sizeW * _blockSize, _size * _blockSize);
 		_floorBlock = new Img("images\\floor.png", 0, 0, _blockSize, _blockSize);
@@ -118,17 +118,6 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 
 	}
 
-	public boolean inPlayerRadius(double x,double y )
-	{
-		if((Math.sqrt((Math.pow(x-_player.getX(), 2.0)+Math.pow(y-_player.getY(), 2.0)))/_blockSize<50))
-		{
-			//System.out.println(y);
-			System.out.println(Math.sqrt((Math.pow(x-_player.getX(), 2.0)+Math.pow(y-_player.getY(), 2.0)))/_blockSize);
-			//System.out.println("asdf");
-			return true;
-		}
-		return false;
-	}
 	public void move() {
 		
 		boolean up=true,down=true,cont=true;
@@ -137,13 +126,13 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		//System.out.println(e.getY());
 		for (int i=0;i<_stopers.size();i++) {
 			if (!_stopers.get(i).intersection(e).isEmpty()) {
-				if(_stopers.get(i).getX()>e.getX()&&Math.abs(_stopers.get(i).getY()-e.getY())<_blockSize-5)
+				if(_stopers.get(i).getX()>e.getX()&&Math.abs(_stopers.get(i).getY()-e.getY())<_blockSize-0.2*_blockSize)
 				{
 					
 					cont=false;
 					//_velX-=_refreshRateX;
 				}
-				if(_stopers.get(i).getY()<e.getY()&&_stopers.get(i).getX()-e.getX()<_blockSize-5)
+				if(_stopers.get(i).getY()<e.getY()&&_stopers.get(i).getX()-e.getX()<_blockSize-0.2*_blockSize)
 				{
 					if(_refreshRateY<0)
 					{
@@ -151,7 +140,7 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 						up=false;
 					}
 				}
-				if(_stopers.get(i).getY()>=e.getY()&&_stopers.get(i).getX()-e.getX()<_blockSize-5)
+				if(_stopers.get(i).getY()>=e.getY()&&_stopers.get(i).getX()-e.getX()<_blockSize-0.2*_blockSize)
 				{
 					if(_refreshRateY>0)
 					{	
@@ -192,7 +181,7 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		}
 		if(code==KeyEvent.VK_ESCAPE)
 		{
-			_timer.start();
+			_timer.stop();
 		}
 		repaint();
 
@@ -212,7 +201,6 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		move();
-		//_timer.stop();
 	}
 
 }

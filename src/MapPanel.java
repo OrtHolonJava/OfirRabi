@@ -23,7 +23,7 @@ import map.Map;
 
 public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	private javax.swing.Timer _timer; 
-	private int _refreshRateX = 5, _refreshRateY = _refreshRateX, _velX = 0, _velY = 0;
+	private int _refreshRateX = 3, _refreshRateY = 5, _velX = 0, _velY = 0;
 	private int _size;
 	private int _sizeW;
 	private int _blockSize;
@@ -46,7 +46,7 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	private LinkedList<Rectangle> _stopers;
 
 	public MapPanel() {
-		_timer=new javax.swing.Timer(30, this);
+		_timer=new javax.swing.Timer(10, this);
 		
 		_stopers = new LinkedList<Rectangle>();
 		_mapFile = "Maps\\map.xml";
@@ -175,8 +175,13 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		repaint();
 	}
 
+	public void rotatePlayer(double angle)
+	{
+		_player.setImg(_player.flipImageHorizontally(_player.rotate(angle)));
+	}
 	public void space() {
 		_refreshRateY *= -1;
+		rotatePlayer(180);
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -200,7 +205,7 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		int code = e.getKeyCode();
 
 		if (code == KeyEvent.VK_SPACE) {
-			 //_refreshRateY*=-1;
+			 
 		}
 	}
 

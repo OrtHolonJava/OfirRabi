@@ -131,36 +131,46 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	}
 	public void move() {
 		
-		_velX += _refreshRateX;
-		_velY += _refreshRateY;
+		boolean up=true,down=true,cont=true;
+		
 		Rectangle e = new Rectangle(_player.getX(), _player.getY(), _blockSize, _blockSize);
 		//System.out.println(e.getY());
 		for (int i=0;i<_stopers.size();i++) {
 			if (!_stopers.get(i).intersection(e).isEmpty()) {
-				if(_stopers.get(i).getX()>e.getX())
+				if(_stopers.get(i).getX()>e.getX()&&Math.abs(_stopers.get(i).getY()-e.getY())<_blockSize-5)
 				{
-					_velX-=_refreshRateX;
+					
+					cont=false;
+					//_velX-=_refreshRateX;
 				}
-				if(_stopers.get(i).getY()<e.getY())
+				if(_stopers.get(i).getY()<e.getY()&&_stopers.get(i).getX()-e.getX()<_blockSize-5)
 				{
-				
 					if(_refreshRateY<0)
 					{
-						System.out.println("1");
-						_velY-=_refreshRateY;
+						System.out.println(_stopers.get(i).getX()-e.getX());
+						up=false;
 					}
 				}
-				if(_stopers.get(i).getY()>=e.getY())
+				if(_stopers.get(i).getY()>=e.getY()&&_stopers.get(i).getX()-e.getX()<_blockSize-5)
 				{
 					if(_refreshRateY>0)
 					{	
-						System.out.println("2");
-
-						_velY-=_refreshRateY;
+						down=false;
 					}
 				}
-				//break;
 			}
+		}
+		if(cont)
+		{
+			_velX += _refreshRateX;
+		}
+		if(up&&_refreshRateY<0)
+		{
+			_velY += _refreshRateY;
+		}
+		if(down&&_refreshRateY>0)
+		{
+			_velY += _refreshRateY;
 		}
 		repaint();
 	}
@@ -177,7 +187,7 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		}
 		if(code==KeyEvent.VK_ESCAPE)
 		{
-			_timer.stop();
+			_timer.start();
 		}
 		repaint();
 
@@ -190,13 +200,14 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		int code = e.getKeyCode();
 
 		if (code == KeyEvent.VK_SPACE) {
-			// refreshRateY*=-1;
+			 //_refreshRateY*=-1;
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		move();
+		//_timer.stop();
 	}
 
 }

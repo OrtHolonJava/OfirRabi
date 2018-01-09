@@ -21,9 +21,9 @@ import images.Img;
 
 import map.Map;
 
-public class MapPanel extends JPanel implements KeyListener,ActionListener {
-	private javax.swing.Timer _timer; 
-	private int _refreshRateX = 3, _refreshRateY = 5, _velX = 0, _velY = 0;
+public class MapPanel extends JPanel implements KeyListener, ActionListener {
+	private javax.swing.Timer _timer;
+	private int _refreshRateX = 1, _refreshRateY = 1, _velX = 0, _velY = 0;
 	private int _size;
 	private int _sizeW;
 	private int _blockSize;
@@ -39,14 +39,13 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	private Img _crateBlock;
 	private Img _snowMan;
 	private Img _sign;
-	private Img _player;
 	private Map _map;
 	private String _mapFile;
 	private Img _blocks[];
 	private LinkedList<Rectangle> _stopers;
-
+	private Player _myPlayer;
 	public MapPanel() {
-		_timer=new javax.swing.Timer(20, this);
+		_timer = new javax.swing.Timer(2, this);
 		
 		_stopers = new LinkedList<Rectangle>();
 		_mapFile = "Maps\\map.xml";
@@ -78,21 +77,7 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		_sign = new Img("images\\sign.png", 0, 0, _blockSize, _blockSize);
 		_blocks[11] = _sign;// sign to continue
 		_map = new Map(_size, _sizeW, _mapFile);
-		_player = new Img("images\\player.png", 0, 0, _blockSize, _blockSize);
-		addMouseMotionListener(new MouseMotionListener() {
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				// TODO Auto-generated method stub
-				repaint();
-			}
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
-				repaint();
-			}
-		});
+		_myPlayer=new Player(_blockSize);
 		_timer.start();
 	}
 
@@ -100,77 +85,27 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		_stopers.clear();
-		g.translate((int) -_player.getX()+_sizeW, 0);
+		g.translate((int) -_myPlayer.getImage().getX() + _sizeW, 0);
 		_imgBackgound.drawImg(g);
 		for (int i = 0; i < _size; i++) {
 			for (int j = 0; j < _sizeW; j++) {
-				if (_map.get_map()[i][j] != 0 && (j*_blockSize)-_player.getX()>-10*_blockSize) {
+				if (_map.get_map()[i][j] != 0 && (j * _blockSize) - _myPlayer.getImage().getX() > -10 * _blockSize) {
 					_blocks[_map.get_map()[i][j]].setImgCords(j * _blockSize, i * _blockSize);
-					//System.out.println("here"+j * _blockSize);
+					// System.out.println("here"+j * _blockSize);
 					_blocks[_map.get_map()[i][j]].drawImg(g);
-					Rectangle e = new Rectangle(j * _blockSize,i * _blockSize, _blockSize, _blockSize);
+					Rectangle e = new Rectangle(j * _blockSize, i * _blockSize, _blockSize, _blockSize);
 					_stopers.add(e);
 				}
 			}
 		}
-		_player.setImgCords(_velX, 12 * _blockSize + _velY);
-		_player.drawImg(g);
+		_myPlayer.getImage().setImgCords(_velX, 12 * _blockSize + _velY);
+		_myPlayer.getImage().drawImg(g);
 
 	}
 
-	public void move() {
-		
-		boolean up=true,down=true,cont=true;
-		
-		Rectangle e = new Rectangle(_player.getX(), _player.getY(), _blockSize, _blockSize);
-		//System.out.println(e.getY());
-		for (int i=0;i<_stopers.size();i++) {
-			if (!_stopers.get(i).intersection(e).isEmpty()) {
-				if(_stopers.get(i).getX()>e.getX()&&Math.abs(_stopers.get(i).getY()-e.getY())<_blockSize-0.2*_blockSize)
-				{
-					
-					cont=false;
-					//_velX-=_refreshRateX;
-				}
-				if(_stopers.get(i).getY()<e.getY()&&_stopers.get(i).getX()-e.getX()<_blockSize-0.2*_blockSize)
-				{
-					if(_refreshRateY<0)
-					{
-						System.out.println(_stopers.get(i).getX()-e.getX());
-						up=false;
-					}
-				}
-				if(_stopers.get(i).getY()>=e.getY()&&_stopers.get(i).getX()-e.getX()<_blockSize-0.2*_blockSize)
-				{
-					if(_refreshRateY>0)
-					{	
-						down=false;
-					}
-				}
-			}
-		}
-		if(cont)
-		{
-			_velX += _refreshRateX;
-		}
-		if(up&&_refreshRateY<0)
-		{
-			_velY += _refreshRateY;
-		}
-		if(down&&_refreshRateY>0)
-		{
-			_velY += _refreshRateY;
-		}
-		repaint();
-	}
-
-	public void rotatePlayer(double angle)
-	{
-		_player.setImg(_player.flipImageHorizontally(_player.rotate(angle)));
-	}
 	public void space() {
 		_refreshRateY *= -1;
-		rotatePlayer(180);
+		_myPlayer.rotatePlayer(180,true);
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -179,8 +114,7 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		if (code == KeyEvent.VK_SPACE) {
 			space();
 		}
-		if(code==KeyEvent.VK_ESCAPE)
-		{
+		if (code == KeyEvent.VK_ESCAPE) {
 			_timer.stop();
 		}
 		repaint();
@@ -194,13 +128,37 @@ public class MapPanel extends JPanel implements KeyListener,ActionListener {
 		int code = e.getKeyCode();
 
 		if (code == KeyEvent.VK_SPACE) {
-			 
+
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		move();
+		int toMove = _myPlayer.move(_stopers, _refreshRateY);
+		switch (toMove) {
+		case 1:
+			_velX += _refreshRateX;
+			break;
+		case 2:
+			_velY += _refreshRateY;
+			break;
+		case 3:
+			_velY += _refreshRateY;
+			_velX += _refreshRateX;
+			break;
+		case 4:
+			_velY += _refreshRateY;
+			break;
+		case 5:
+			_velY += _refreshRateY;
+			_velX += _refreshRateX;
+			break;
+
+		default:
+			break;
+		}
+		repaint();
+
 	}
 
 }

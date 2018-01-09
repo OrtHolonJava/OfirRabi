@@ -12,7 +12,7 @@ public class MapFrame extends JFrame {
 	    setSize(2000, 750);
 	    setVisible(true);
 	    this.addKeyListener(_map);
-	    _map.move();
+	    //_map.move();
 	 //   _motion=new PlayerMotion(_map);
 	    //_motion.start();
 

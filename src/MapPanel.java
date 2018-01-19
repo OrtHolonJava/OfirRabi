@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.Timer;
 
 import javax.swing.JPanel;
+import javax.swing.JToggleButton.ToggleButtonModel;
 import javax.swing.text.DefaultEditorKit.BeepAction;
 
 import images.Img;
@@ -22,8 +23,9 @@ import images.Img;
 import map.Map;
 
 public class MapPanel extends JPanel implements KeyListener, ActionListener {
-	private javax.swing.Timer _timer;
-	private int _refreshRateX = 1, _refreshRateY = 1, _velX = 0, _velY = 0;
+	public static javax.swing.Timer _timer;
+	private int _refreshRateX = 2, _refreshRateY = 2, _velX = 0, _velY = 0;
+	private int _toMove;
 	private int _size;
 	private int _sizeW;
 	private int _blockSize;
@@ -45,8 +47,8 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 	private LinkedList<Rectangle> _stopers;
 	private Player _myPlayer;
 	public MapPanel() {
-		_timer = new javax.swing.Timer(2, this);
-		
+		_toMove=1;
+		_timer = new javax.swing.Timer(5, this);
 		_stopers = new LinkedList<Rectangle>();
 		_mapFile = "Maps\\map.xml";
 		_size = Map.getElementCountByName(_mapFile, "Line");
@@ -107,8 +109,12 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void space() {
-		_refreshRateY *= -1;
-		_myPlayer.rotatePlayer();
+		System.out.println(_toMove+" to");
+		if(_toMove==1||_toMove==0)
+		{
+			_refreshRateY *= -1;
+			_myPlayer.rotatePlayer();
+		}
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -137,8 +143,8 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int toMove = _myPlayer.move(_stopers, _refreshRateY);
-		switch (toMove) {
+		_toMove = _myPlayer.move(_stopers, _refreshRateY);
+		switch (_toMove) {
 		case 1:
 			_velX += _refreshRateX;
 			break;
@@ -156,7 +162,6 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 			_velY += _refreshRateY;
 			_velX += _refreshRateX;
 			break;
-
 		default:
 			break;
 		}

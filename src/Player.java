@@ -1,8 +1,5 @@
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
@@ -13,24 +10,25 @@ public class Player {
 
 	private Img _image;
 	private int _blockSize;
-	private int _jumpCounter;
-	private boolean isGravity;
+	private int _walkCounter;
+	private String _toRotate;
 
 	public Player(int blockSize) {
 		_blockSize = blockSize;
 		_image = new Img("images\\player.png", 0, 0, blockSize, blockSize);
-		_jumpCounter = 1 * 10;
-		isGravity = false;
+		_walkCounter = 1 * 10;
+		_toRotate = "";
 	}
 
 	public Img getImage() {
 		return _image;
 	}
 
-	public void rotatePlayer(double angle, boolean changeIsGravity) {
-		_image.setImg(_image.flipImageHorizontally(_image.rotate(angle)));
-		if (changeIsGravity) {
-			isGravity = !isGravity;
+	public void rotatePlayer() {
+		if (_toRotate.equals("")) {
+			_toRotate = "B";
+		} else {
+			_toRotate = "";
 		}
 	}
 
@@ -71,23 +69,32 @@ public class Player {
 		if (down && _refreshRateY > 0) {
 			toMove += 4;
 		}
-		walk();
+		if (up && down) {
+			jump();
+		} else {
+			walk();
+		}
 		return toMove;
 	}
 
 	public void walk() {
 		Image i = new ImageIcon(this.getClass().getClassLoader()
-				.getResource("images\\playerWalk\\Walk (" + _jumpCounter / 10 + ").png")).getImage();
+				.getResource("images\\playerWalk" + _toRotate + "\\Walk (" + _walkCounter / 10 + ").png")).getImage();
 		// Img i=new Img("images\\playerJump\\("+_jumpCounter+").png", 0, 0,
 		// _blockSize, _blockSize);
 		_image.setImg(i);
-		if (isGravity) {
-			rotatePlayer(180, false);
-		}
-		if (_jumpCounter == 13 * 10) {
-			_jumpCounter = 1 * 10;
+		if (_walkCounter == 13 * 10) {
+			_walkCounter = 1 * 10;
 		} else {
-			_jumpCounter++;
+			_walkCounter++;
 		}
+	}
+	public void jump() {
+		Image i = new ImageIcon(this.getClass().getClassLoader()
+				.getResource("images\\playerJump" + _toRotate + "\\Jump.png")).getImage();
+		// Img i=new Img("images\\playerJump\\("+_jumpCounter+").png", 0, 0,
+		// _blockSize, _blockSize);
+		_image.setImg(i);
+		
 	}
 }

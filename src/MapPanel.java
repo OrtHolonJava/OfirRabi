@@ -93,8 +93,11 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 					_blocks[_map.get_map()[i][j]].setImgCords(j * _blockSize, i * _blockSize);
 					// System.out.println("here"+j * _blockSize);
 					_blocks[_map.get_map()[i][j]].drawImg(g);
-					Rectangle e = new Rectangle(j * _blockSize, i * _blockSize, _blockSize, _blockSize);
-					_stopers.add(e);
+					if(_map.get_map()[i][j] != 7)
+					{
+						Rectangle e = new Rectangle(j * _blockSize, i * _blockSize, _blockSize, _blockSize);
+						_stopers.add(e);
+					}
 				}
 			}
 		}
@@ -105,7 +108,7 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 
 	public void space() {
 		_refreshRateY *= -1;
-		_myPlayer.rotatePlayer(180,true);
+		_myPlayer.rotatePlayer();
 	}
 
 	public void keyPressed(KeyEvent e) {

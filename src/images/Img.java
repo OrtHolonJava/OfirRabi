@@ -27,6 +27,38 @@ public class Img {
 		setImgSize(width, height);
 	}
 
+	public Image get_image() {
+		return _image;
+	}
+
+	public void set_image(Image _image) {
+		this._image = _image;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
 	/**
 	 * drawing the img
 	 * 

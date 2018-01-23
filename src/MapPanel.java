@@ -24,8 +24,7 @@ import map.Map;
 
 public class MapPanel extends JPanel implements KeyListener, ActionListener {
 	public static javax.swing.Timer _timer;
-	private int _refreshRateX = 2, _refreshRateY = 2, _velX = 0, _velY = 0;
-	private int _toMove;
+	private int _refreshRateX = 10, _refreshRateY = 10, _velX = 0, _velY = 0;
 	private int _size;
 	private int _sizeW;
 	private int _blockSize;
@@ -46,9 +45,9 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 	private Img _blocks[];
 	private LinkedList<Rectangle> _stopers;
 	private Player _myPlayer;
+
 	public MapPanel() {
-		_toMove=1;
-		_timer = new javax.swing.Timer(5, this);
+		_timer = new javax.swing.Timer(1000 / 60, this);
 		_stopers = new LinkedList<Rectangle>();
 		_mapFile = "Maps\\map.xml";
 		_size = Map.getElementCountByName(_mapFile, "Line");
@@ -79,7 +78,7 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 		_sign = new Img("images\\sign.png", 0, 0, _blockSize, _blockSize);
 		_blocks[11] = _sign;// sign to continue
 		_map = new Map(_size, _sizeW, _mapFile);
-		_myPlayer=new Player(_blockSize);
+		_myPlayer = new Player(_blockSize);
 		_timer.start();
 	}
 
@@ -95,8 +94,7 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 					_blocks[_map.get_map()[i][j]].setImgCords(j * _blockSize, i * _blockSize);
 					// System.out.println("here"+j * _blockSize);
 					_blocks[_map.get_map()[i][j]].drawImg(g);
-					if(_map.get_map()[i][j] != 7)
-					{
+					if (_map.get_map()[i][j] != 7) {
 						Rectangle e = new Rectangle(j * _blockSize, i * _blockSize, _blockSize, _blockSize);
 						_stopers.add(e);
 					}
@@ -109,12 +107,9 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void space() {
-		System.out.println(_toMove+" to");
-		if(_toMove==1||_toMove==0)
-		{
-			_refreshRateY *= -1;
-			_myPlayer.rotatePlayer();
-		}
+		_refreshRateY *= -1;
+		_myPlayer.rotatePlayer();
+
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -143,30 +138,30 @@ public class MapPanel extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		_toMove = _myPlayer.move(_stopers, _refreshRateY);
-		switch (_toMove) {
-		case 1:
-			_velX += _refreshRateX;
-			break;
-		case 2:
-			_velY += _refreshRateY;
-			break;
-		case 3:
-			_velY += _refreshRateY;
-			_velX += _refreshRateX;
-			break;
-		case 4:
-			_velY += _refreshRateY;
-			break;
-		case 5:
-			_velY += _refreshRateY;
-			_velX += _refreshRateX;
-			break;
-		default:
-			break;
+		if (getWidth() != 0 && getHeight() != 0) {
+			switch (_myPlayer.move(_stopers, _refreshRateY)) {
+			case 1:
+				_velX += _refreshRateX;
+				break;
+			case 2:
+				_velY += _refreshRateY;
+				break;
+			case 3:
+				_velY += _refreshRateY;
+				_velX += _refreshRateX;
+				break;
+			case 4:
+				_velY += _refreshRateY;
+				break;
+			case 5:
+				_velY += _refreshRateY;
+				_velX += _refreshRateX;
+				break;
+			default:
+				break;
+			}
+			repaint();
 		}
-		repaint();
-
 	}
 
 }

@@ -16,8 +16,8 @@ public class Player {
 	public Player(int blockSize) {
 		_blockSize = blockSize;
 		_image = new Img("images\\player.png", 0, 0, blockSize, blockSize);
-		_walkCounter = 1 * MapPanel._timer.getDelay();
-		_toRotate = "";
+		_walkCounter = 0;
+		_toRotate = "A";
 	}
 
 	public Img getImage() {
@@ -25,11 +25,11 @@ public class Player {
 	}
 
 	public void rotatePlayer() {
-	
-		if (_toRotate.equals("")) {
+
+		if (_toRotate.equals("A")) {
 			_toRotate = "B";
 		} else {
-			_toRotate = "";
+			_toRotate = "A";
 		}
 	}
 
@@ -70,32 +70,31 @@ public class Player {
 			toMove += 4;
 		}
 		if (up && down) {
-			jump();
+			// jump();
 		} else {
 			walk();
 		}
-		if(_image.getY()>602)
-		{
-			//dive and die
+		if (_image.getY() > 602) {
+			// dive and die
 		}
 		return toMove;
 	}
 
 	public void walk() {
+		System.out.println(_walkCounter % 13 + 1);
+		System.out.println("images\\playerWalk" + _toRotate + "\\Walk (" + (_walkCounter % 13 + 1) + ").png");
 		Image i = new ImageIcon(this.getClass().getClassLoader()
-				.getResource("images\\playerWalk" + _toRotate + "\\Walk (" + _walkCounter / MapPanel._timer.getDelay() + ").png")).getImage();
+				.getResource("images\\playerWalk" + _toRotate + "\\Walk (" + (_walkCounter % 13 + 1) + ").png"))
+						.getImage();
 		_image.setImg(i);
-		
-		if (_walkCounter >= 13 * MapPanel._timer.getDelay()) {
-			_walkCounter = 1 * MapPanel._timer.getDelay();
-		} else {
-			_walkCounter++;
-		}
+		_walkCounter++;
 	}
+
 	public void jump() {
-		Image i = new ImageIcon(this.getClass().getClassLoader()
-				.getResource("images\\playerJump" + _toRotate + "\\Jump.png")).getImage();
+		Image i = new ImageIcon(
+				this.getClass().getClassLoader().getResource("images\\playerJump" + _toRotate + "\\Jump.png"))
+						.getImage();
 		_image.setImg(i);
-		
+
 	}
 }

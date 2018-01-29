@@ -1,4 +1,4 @@
-package map;
+
 
 import java.io.File;
 
@@ -15,6 +15,8 @@ public class Map
 	private int _size;
 	private int _counter = 0;
 	private int[][] _map;
+	private int _rows;
+	private int _columns;
 	
 	/**
 	 * creates new map object
@@ -26,7 +28,8 @@ public class Map
 	{
 		_map = new int[size][sizeW];
 		_size=sizeW;
-
+		_rows=size;
+		_columns=sizeW;
 		try 
 		{
 			File file = new File(fileName);
@@ -45,6 +48,14 @@ public class Map
 		{
 			System.out.println(e.getMessage());
 		}
+	}
+	public int getRows()
+	{
+		return _rows;
+	}
+	public int getColumns()
+	{
+		return _columns;
 	}
 	/**
 	 * return map matrix of int

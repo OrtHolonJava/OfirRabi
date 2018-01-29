@@ -1,100 +1,165 @@
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.geom.Area;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
+import javax.swing.Timer;
 
-import images.Img;
+public class Player implements ActionListener, KeyListener {
 
-public class Player {
+	private int _xPosition = 0;// the x position of the player
+	private int _yPosition = 13 * GamePanel._blockSize;// the y position of the player
+	private Img _image;// the image of the player
+	private int _spritesTicker;// counting every delay of timer to change the sprite of the player
+	private String _playerGravity;// determine the gravity state of the player: "Forward" if as usual,"Backward"
+									// if opposite
+	private LinkedList<PlayerMovedInterface> _listeners;// list of panel listeners (mainly the game panel)
+	private Timer _playerTimer;// the player timer
+	private int _xTemp;// the tempt x changes
+	private int _yTemp;// the tempt y changes
+	private boolean _isAbleToChangeGravity = false;//check if the player can to rotate
+	private int _fps=60;//the players' speed
+	private int _score=0;
+	public Player() {
 
-	private Img _image;
-	private int _blockSize;
-	private int _walkCounter;
-	private String _toRotate;
+		_image = new Img("WalkingPlayerForward//", _xPosition, _yPosition, 40, 40);// setting the first image
+		_playerGravity = "Forward";// setting the usual gravity
+		_listeners = new LinkedList<PlayerMovedInterface>();// initialize the listeners list
+		_xTemp = 10;
+		_yTemp = 10;
 
-	public Player(int blockSize) {
-		_blockSize = blockSize;
-		_image = new Img("images\\player.png", 0, 0, blockSize, blockSize);
-		_walkCounter = 0;
-		_toRotate = "A";
+		_playerTimer = new Timer(1000/_fps, this);
+		_playerTimer.start();
+
+	}
+
+	public void addListner(PlayerMovedInterface p) {
+		_listeners.add(p);
+	}
+
+	// tell the panels the next move of the player to draw
+	public void iMoved() {
+		for (PlayerMovedInterface p : _listeners) {
+			p.playerMoved();
+		}
+	}
+
+	public Timer getTimer() {
+		return _playerTimer;
+	}
+
+	public int getXPosition() {
+		return _xPosition;
+	}
+
+	public void setXPosition(int x) {
+		_xPosition = x;
+	}
+
+	public int getYPosition() {
+		return _yPosition;
+	}
+
+	public void setYPosition(int y) {
+		_yPosition = y;
 	}
 
 	public Img getImage() {
 		return _image;
 	}
 
-	public void rotatePlayer() {
-
-		if (_toRotate.equals("A")) {
-			_toRotate = "B";
-		} else {
-			_toRotate = "A";
-		}
+	public void initiatTicker() {
+		_spritesTicker = 0;
 	}
 
-	public int move(LinkedList<Rectangle> _stopers, int _refreshRateY) {
+	public int getScore()
+	{
+		return _score;
+	}
+	// player walk animation
+	public void walk() {
+		int spriteNumber = _spritesTicker % 13 + 1;
+		Image i = new ImageIcon(this.getClass().getClassLoader()
+				.getResource("WalkingPlayer" + _playerGravity + "//Walk (" + spriteNumber + ").png")).getImage();
+		_image.setImg(i);
+		_spritesTicker++;
+	}
 
-		boolean up = true, down = true, cont = true;
-		int toMove = 0;
-		Rectangle e = new Rectangle(_image.getX(), _image.getY(), _blockSize, _blockSize);
-		for (int i = 0; i < _stopers.size(); i++) {
-			if (!_stopers.get(i).intersection(e).isEmpty()) {
-				if (_stopers.get(i).getX() > e.getX()
-						&& Math.abs(_stopers.get(i).getY() - e.getY()) < _blockSize - 0.2 * _blockSize) {
+	public void checkIntersectionsAndSetMoves() {
+		boolean xMove = true, yMove = true;
+		_isAbleToChangeGravity = false;
+		Rectangle e = new Rectangle(_xPosition, _yPosition, GamePanel._blockSize, GamePanel._blockSize);
+		for (int i = 0; i < GamePanel._obstacles.size(); i++) {
+			if (!GamePanel._obstacles.get(i).intersection(e).isEmpty()) {
+				Rectangle t = GamePanel._obstacles.get(i);
+				if (t.getX() - e.getX() < GamePanel._blockSize
+						&& Math.abs(t.getY() - e.getY()) + 10 < GamePanel._blockSize) {
+					xMove = false;
+					System.out.println("a");
+				}
+				if (_yTemp < 0 && e.getY() - t.getY() < GamePanel._blockSize && e.getY() - t.getY() >= 0) {
+					yMove = false;
+					_isAbleToChangeGravity = true;
+					System.out.println("b");
+				} else if (_yTemp > 0 && t.getY() - e.getY() < GamePanel._blockSize && t.getY() - e.getY() >= 0) {
+					yMove = false;
+					_isAbleToChangeGravity = true;
+					System.out.println("c");
+				}
 
-					cont = false;
-				}
-				if (_stopers.get(i).getY() < e.getY()
-						&& _stopers.get(i).getX() - e.getX() < _blockSize - 0.2 * _blockSize) {
-					if (_refreshRateY < 0) {
-						System.out.println(_stopers.get(i).getX() - e.getX());
-						up = false;
-					}
-				}
-				if (_stopers.get(i).getY() >= e.getY()
-						&& _stopers.get(i).getX() - e.getX() < _blockSize - 0.2 * _blockSize) {
-					if (_refreshRateY > 0) {
-						down = false;
-					}
-				}
 			}
 		}
-		if (cont) {
-			toMove += 1;
+		if (!xMove) {
+			_xPosition -= _xTemp;
+			_score+=10;
 		}
-		if (up && _refreshRateY < 0) {
-			toMove += 2;
+		if (!yMove) {
+			_yPosition -= _yTemp;
 		}
-		if (down && _refreshRateY > 0) {
-			toMove += 4;
-		}
-		if (up && down) {
-			// jump();
-		} else {
-			walk();
-		}
-		if (_image.getY() > 602) {
-			// dive and die
-		}
-		return toMove;
 	}
 
-	public void walk() {
-		System.out.println(_walkCounter % 13 + 1);
-		System.out.println("images\\playerWalk" + _toRotate + "\\Walk (" + (_walkCounter % 13 + 1) + ").png");
-		Image i = new ImageIcon(this.getClass().getClassLoader()
-				.getResource("images\\playerWalk" + _toRotate + "\\Walk (" + (_walkCounter % 13 + 1) + ").png"))
-						.getImage();
-		_image.setImg(i);
-		_walkCounter++;
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		_xPosition += _xTemp;
+		_yPosition += _yTemp;
+		checkIntersectionsAndSetMoves();
+		walk();
+		iMoved();
 	}
 
-	public void jump() {
-		Image i = new ImageIcon(
-				this.getClass().getClassLoader().getResource("images\\playerJump" + _toRotate + "\\Jump.png"))
-						.getImage();
-		_image.setImg(i);
+	// change the gravity side
+	public void changeGravity() {
+		if (_isAbleToChangeGravity) {
+			if (_playerGravity.equals("Forward")) {
+				_playerGravity = "Backward";
+			} else {
+				_playerGravity = "Forward";
+			}
+			_yTemp *= -1;
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			changeGravity();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 }

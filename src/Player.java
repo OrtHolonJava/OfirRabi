@@ -100,16 +100,13 @@ public class Player implements ActionListener, KeyListener {
 				if (t.getX() - e.getX() < GamePanel._blockSize
 						&& Math.abs(t.getY() - e.getY()) + 10 < GamePanel._blockSize) {
 					xMove = false;
-					System.out.println("a");
 				}
 				if (_yTemp < 0 && e.getY() - t.getY() < GamePanel._blockSize && e.getY() - t.getY() >= 0) {
 					yMove = false;
 					_isAbleToChangeGravity = true;
-					System.out.println("b");
 				} else if (_yTemp > 0 && t.getY() - e.getY() < GamePanel._blockSize && t.getY() - e.getY() >= 0) {
 					yMove = false;
 					_isAbleToChangeGravity = true;
-					System.out.println("c");
 				}
 
 			}

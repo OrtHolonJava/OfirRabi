@@ -1,5 +1,5 @@
+
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 public class GameFrame extends JFrame implements PlayerMovedInterface {
 
@@ -14,7 +14,7 @@ public class GameFrame extends JFrame implements PlayerMovedInterface {
 		this.addKeyListener(_p);
 		add(_game);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(getMaximumSize().width, 16*40);
+		setSize(17*40, 17*40);
 		setVisible(true);
 	}
 

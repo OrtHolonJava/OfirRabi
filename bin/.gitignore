@@ -1,4 +1,3 @@
-/images/
 /Bonus.class
 /GameFrame.class
 /GamePanel.class
@@ -9,3 +8,11 @@
 /PlayerMovedInterface.class
 /WalkingPlayerBackward/
 /WalkingPlayerForward/
+/images/
+/GameFrame$1.class
+/OpeningPanel.class
+/OpeningFrame.class
+/OpeningPanel$1.class
+/OpeningPanel$2.class
+/ExitFrameInterface.class
+/OpeningPanel$3.class

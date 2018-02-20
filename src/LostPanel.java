@@ -7,19 +7,18 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class OpeningPanel extends JPanel {
-
+public class LostPanel extends JPanel {
 	private JButton _startBtn;
 	private JButton _instructionsBtn;
 	private JButton _exitBtn;
 	private Img _background;
-	private OpeningFrame _mainFrame;
+	private GameFrame _mainFrame;
 	private Font _font;
 	private Color _color;
-	public OpeningPanel()
+	public LostPanel()
 	{
 		setLayout(null);
-		_background=new Img("images//gameBackground.png", 0, 0, 17*40, 17*40);
+		_background=new Img("images//gameOver.jpg", 0, 0, 17*40, 17*40);
 		_color=new Color(128,0,128);
 		_font=new Font("Ariel", Font.BOLD, 12);
 		_startBtn=new JButton();
@@ -70,8 +69,6 @@ public class OpeningPanel extends JPanel {
 				closeMainFrame();
 			}
 		});
-		
-		
 	}
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -80,7 +77,7 @@ public class OpeningPanel extends JPanel {
 		_background.setImgCords(0, 0);
 		_background.drawImg(g);
 	}
-	public void setMainFrame(OpeningFrame e)
+	public void setMainFrame(GameFrame e)
 	{
 		_mainFrame=e;
 		setPanel();

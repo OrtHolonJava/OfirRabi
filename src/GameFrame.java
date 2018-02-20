@@ -1,7 +1,7 @@
 
 import javax.swing.JFrame;
 
-public class GameFrame extends JFrame implements PlayerMovedInterface {
+public class GameFrame extends JFrame implements PlayerMovedInterface,ExitFrameInterface {
 
 	private GamePanel _game;
 	private Player _p;
@@ -20,6 +20,21 @@ public class GameFrame extends JFrame implements PlayerMovedInterface {
 
 	@Override
 	public void playerMoved() {
+		
+	}
+
+	@Override
+	public void playerLost() {
+		// TODO Auto-generated method stub
+		this.setVisible(false);
+		this.dispose();
+	}
+
+	@Override
+	public void closeFrame() {
+		// TODO Auto-generated method stub
+		this.setVisible(false);
+		this.dispose();
 		
 	}
 }

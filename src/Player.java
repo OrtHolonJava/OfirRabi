@@ -127,6 +127,16 @@ public class Player implements ActionListener, KeyListener {
 		checkIntersectionsAndSetMoves();
 		walk();
 		iMoved();
+		if(_yPosition>15*40||_yPosition<0)
+		{
+			System.out.println("done");
+			_playerTimer.stop();
+			LostFrame l=new LostFrame();
+			l.startFrame(new LostPanel());
+			for (PlayerMovedInterface p:_listeners) {
+				p.playerLost();
+			}
+		}
 	}
 
 	// change the gravity side

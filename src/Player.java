@@ -22,9 +22,9 @@ public class Player implements ActionListener, KeyListener {
 	private Timer _playerTimer;// the player timer
 	private int _xTemp;// the tempt x changes
 	private int _yTemp;// the tempt y changes
-	private boolean _isAbleToChangeGravity = false;//check if the player can to rotate
-	private int _fps=60;//the players' speed
-	private int _score=0;
+	private boolean _isAbleToChangeGravity = false;// check if the player can to rotate
+	private int _fps = 60;// the players' speed
+
 	public Player() {
 
 		_image = new Img("WalkingPlayerForward//", _xPosition, _yPosition, 40, 40);// setting the first image
@@ -33,7 +33,7 @@ public class Player implements ActionListener, KeyListener {
 		_xTemp = 10;
 		_yTemp = 10;
 
-		_playerTimer = new Timer(1000/_fps, this);
+		_playerTimer = new Timer(1000 / _fps, this);
 		_playerTimer.start();
 
 	}
@@ -77,10 +77,7 @@ public class Player implements ActionListener, KeyListener {
 		_spritesTicker = 0;
 	}
 
-	public int getScore()
-	{
-		return _score;
-	}
+	
 	// player walk animation
 	public void walk() {
 		int spriteNumber = _spritesTicker % 13 + 1;
@@ -113,7 +110,6 @@ public class Player implements ActionListener, KeyListener {
 		}
 		if (!xMove) {
 			_xPosition -= _xTemp;
-			_score+=10;
 		}
 		if (!yMove) {
 			_yPosition -= _yTemp;
@@ -125,15 +121,12 @@ public class Player implements ActionListener, KeyListener {
 		_xPosition += _xTemp;
 		_yPosition += _yTemp;
 		checkIntersectionsAndSetMoves();
-		walk();
+			walk();
 		iMoved();
-		if(_yPosition>15*40||_yPosition<0)
-		{
+		if (_yPosition > 15 * 40 || _yPosition < 0) {
 			System.out.println("done");
 			_playerTimer.stop();
-			LostFrame l=new LostFrame();
-			l.startFrame(new LostPanel());
-			for (PlayerMovedInterface p:_listeners) {
+			for (PlayerMovedInterface p : _listeners) {
 				p.playerLost();
 			}
 		}
@@ -150,7 +143,10 @@ public class Player implements ActionListener, KeyListener {
 			_yTemp *= -1;
 		}
 	}
-
+	public String getGravity()
+	{
+		return _playerGravity;
+	}
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {

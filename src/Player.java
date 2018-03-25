@@ -24,6 +24,10 @@ public class Player implements ActionListener, KeyListener {
 	private int _yTemp;// the tempt y changes
 	private boolean _isAbleToChangeGravity = false;// check if the player can to rotate
 	private int _fps = 60;// the players' speed
+	private LinkedList<Integer> _xPositions;
+	private LinkedList<Integer> _yPositions;
+	private int _turn;
+	private boolean _addToList = true;
 
 	public Player() {
 
@@ -32,7 +36,9 @@ public class Player implements ActionListener, KeyListener {
 		_listeners = new LinkedList<PlayerMovedInterface>();// initialize the listeners list
 		_xTemp = 10;
 		_yTemp = 10;
-
+		_turn = 0;
+		_xPositions = new LinkedList<Integer>();
+		_yPositions = new LinkedList<Integer>();
 		_playerTimer = new Timer(1000 / _fps, this);
 		_playerTimer.start();
 
@@ -77,7 +83,6 @@ public class Player implements ActionListener, KeyListener {
 		_spritesTicker = 0;
 	}
 
-	
 	// player walk animation
 	public void walk() {
 		int spriteNumber = _spritesTicker % 13 + 1;
@@ -114,6 +119,22 @@ public class Player implements ActionListener, KeyListener {
 		if (!yMove) {
 			_yPosition -= _yTemp;
 		}
+		_addToList = true;
+		if (!xMove && !yMove) {
+			_addToList = false;
+		}
+	}
+
+	public LinkedList<Integer> getXList() {
+		return _xPositions;
+	}
+
+	public LinkedList<Integer> getYList() {
+		return _yPositions;
+	}
+
+	public int getTurn() {
+		return _turn;
 	}
 
 	@Override
@@ -121,7 +142,15 @@ public class Player implements ActionListener, KeyListener {
 		_xPosition += _xTemp;
 		_yPosition += _yTemp;
 		checkIntersectionsAndSetMoves();
-			walk();
+		if (_addToList) {
+			_xPositions.add(_xPosition);
+			_yPositions.add(_yPosition);
+		}
+		if(_turn<_xPositions.size()+Rival.wait-1)
+		{
+		_turn++;
+		}
+		walk();
 		iMoved();
 		if (_yPosition > 15 * 40 || _yPosition < 0) {
 			System.out.println("done");
@@ -143,10 +172,11 @@ public class Player implements ActionListener, KeyListener {
 			_yTemp *= -1;
 		}
 	}
-	public String getGravity()
-	{
+
+	public String getGravity() {
 		return _playerGravity;
 	}
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {

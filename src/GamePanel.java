@@ -78,11 +78,12 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		// create the random maps list
 		_mapsToShow = new LinkedList<Map>();
 		_startMap = new LinkedList<Integer>();
-		for (int i = 0; i < 1; i++) {
+		int num=4;
+		for (int i = 0; i < num; i++) {
 			_mapsToShow.add(_maps[mapToShowNext()]);
 		}
 		_startMap.add(0);
-		for (int i = 1; i < 1; i++) {
+		for (int i = 1; i < num; i++) {
 			_startMap.add(_mapsToShow.get(i - 1).getColumns() + _startMap.get(i - 1));
 		}
 		_finishPosiiton = _startMap.getLast() + _mapsToShow.getLast().getColumns();
@@ -159,10 +160,8 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 	 */
 	public boolean isFinishedLevel() {
 		_stepsToEnd = _finishPosiiton * _blockSize - _myPlayer.getXPosition();
-		System.out.println(_stepsToEnd);
 		if ((_startMap.getLast() * _blockSize - _myPlayer.getXPosition())
 				* -1 >= _mapsToShow.getLast().getColumns() * _blockSize - 1000) {
-			System.out.println("end");
 			return true;
 		}
 		return false;

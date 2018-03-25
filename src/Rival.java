@@ -21,13 +21,11 @@ public class Rival implements ActionListener{
 	private int _lastX;
 	private int _lastY;
 	public Rival(Player p) {
-
 		_image = new Img("WalkingPlayerForward//", _xPosition, _yPosition, 40, 40);// setting the first image
 		_listeners = new LinkedList<PlayerMovedInterface>();// initialize the listeners list
 		_player=p;
 		_playerTimer = new Timer(1000 / _fps, this);
 		_playerTimer.start();
-
 	}
 
 	public void addListner(PlayerMovedInterface p) {
@@ -79,14 +77,15 @@ public class Rival implements ActionListener{
 		_spritesTicker++;
 	}
 
-
+	static int wait=20;
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		_lastX=_player.getXPosition();
-		_lastY=_player.getYPosition();
-		_xPosition =_player.getXPosition();
-		_yPosition =_player.getYPosition();
+		if(_player.getTurn()>wait)
+		{
+		_xPosition =_player.getXList().get(_player.getTurn()-wait);
+		_yPosition =_player.getYList().get(_player.getTurn()-wait);
 		walk();
+		}
 	}
 
 }

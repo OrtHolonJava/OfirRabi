@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Area;
+
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
@@ -17,7 +17,7 @@ public class Player implements ActionListener, KeyListener {
 	private Img _image;// the image of the player
 	private int _spritesTicker;// counting every delay of timer to change the sprite of the player
 	private String _playerGravity;// determine the gravity state of the player: "Forward" if as usual,"Backward"
-									// if opposite
+	// if opposite
 	private LinkedList<PlayerMovedInterface> _listeners;// list of panel listeners (mainly the game panel)
 	private Timer _playerTimer;// the player timer
 	private int _xTemp;// the tempt x changes
@@ -26,6 +26,7 @@ public class Player implements ActionListener, KeyListener {
 	private int _fps = 60;// the players' speed
 	private LinkedList<Integer> _xPositions;
 	private LinkedList<Integer> _yPositions;
+	private LinkedList<String> _gravities;
 	private int _turn;
 	private boolean _addToList = true;
 
@@ -39,6 +40,7 @@ public class Player implements ActionListener, KeyListener {
 		_turn = 0;
 		_xPositions = new LinkedList<Integer>();
 		_yPositions = new LinkedList<Integer>();
+		_gravities = new LinkedList<String>();
 		_playerTimer = new Timer(1000 / _fps, this);
 		_playerTimer.start();
 
@@ -133,6 +135,10 @@ public class Player implements ActionListener, KeyListener {
 		return _yPositions;
 	}
 
+	public LinkedList<String> getGravityList() {
+		return _gravities;
+	}
+
 	public int getTurn() {
 		return _turn;
 	}
@@ -145,10 +151,10 @@ public class Player implements ActionListener, KeyListener {
 		if (_addToList) {
 			_xPositions.add(_xPosition);
 			_yPositions.add(_yPosition);
+			_gravities.add(_playerGravity);
 		}
-		if(_turn<_xPositions.size()+Rival.wait-1)
-		{
-		_turn++;
+		if (_turn < _xPositions.size() + Rival.wait - 1) {
+			_turn++;
 		}
 		walk();
 		iMoved();

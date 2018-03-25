@@ -1,20 +1,13 @@
-import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.Area;
 import java.util.LinkedList;
 import java.util.Random;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements PlayerMovedInterface {
 
 	private Img _objects[]; // Array of all game stand objects
-	private Img _BG;
 	public static int _blockSize; // size of object
 	private Map _maps[]; // map file
 	private LinkedList<Map> _mapsToShow;// list of maps to show on panel

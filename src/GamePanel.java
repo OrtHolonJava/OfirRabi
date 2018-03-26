@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 	private int _finishTrack;
 	public static LinkedList<Rectangle> _obstacles;// ;list of possible
 													// obstacles for any player
+	private Img _BG;
 	public GamePanel() {
 		super();
 		_blockSize = 40;
@@ -43,6 +44,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		_objects[9] = new Img("images//Stone.png", 0, 0, _blockSize, _blockSize);
 		_objects[10] = new Img("images//Tree.png", 0, 0, _blockSize, _blockSize);
 		_objects[11] = new Img("images//SnowButtom.png", 0, 0, _blockSize, _blockSize);
+		_BG=new Img("images//BG.png", 0, 0, _blockSize*17, _blockSize*17);
 		
 	}
 
@@ -60,7 +62,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 	public void initMaps() {
 		String path;// path of map
 		int rows, columns;// rows and columns numbers of map
-		_maps = new Map[2];
+		_maps = new Map[3];
 		// creates the maps
 		for (int i = 0; i < _maps.length; i++) {
 			path = "Maps//map" + i + ".xml";
@@ -118,6 +120,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
+		_BG.drawImg(g);
 		if (_stepsToEnd >= 14 * 40) {
 			g.translate(-_myPlayer.getXPosition() + 3 * _blockSize, 0);// tracking
 																		// the

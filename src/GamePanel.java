@@ -3,6 +3,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 import java.util.Random;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements PlayerMovedInterface {
@@ -26,6 +28,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		_blockSize = 40;
 		initObjects();
 		initMaps();
+		
 	}
 
 	/**
@@ -51,6 +54,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 	public void setPlayer(Player p) {
 		_myPlayer = p;
 		initObstacles();
+		
 	}
 	public void setRival(Rival r)
 	{
@@ -73,7 +77,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		// create the random maps list
 		_mapsToShow = new LinkedList<Map>();
 		_startMap = new LinkedList<Integer>();
-		int num=4;
+		int num=10;
 		for (int i = 0; i < num; i++) {
 			_mapsToShow.add(_maps[mapToShowNext()]);
 		}
@@ -88,7 +92,6 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 	 * initialize the obstacles list
 	 */
 	public void initObstacles() {
-		Random r = new Random();
 		_obstacles = new LinkedList<Rectangle>();
 		for (int k = 0; k < _mapsToShow.size(); k++) {
 			Map m = _mapsToShow.get(k);

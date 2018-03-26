@@ -89,6 +89,12 @@ public class Rival implements ActionListener {
 			_player.getTimer().stop();
 			_playerTimer.stop();
 		}
+		if(_player.getTurn()%250==0)
+		{
+			_fps+=1;
+			_playerTimer.setDelay(1000/_fps);
+			_player.getTimer().setDelay(1000/_fps);
+		}
 	}
 
 }

@@ -29,9 +29,9 @@ public class Player implements ActionListener, KeyListener {
 	private LinkedList<String> _gravities;
 	private int _turn;
 	private boolean _addToList = true;
-
+	private int _score;
 	public Player() {
-
+		_score =0;
 		_image = new Img("WalkingPlayerForward//", _xPosition, _yPosition, 40, 40);// setting the first image
 		_playerGravity = "Forward";// setting the usual gravity
 		_listeners = new LinkedList<PlayerMovedInterface>();// initialize the listeners list
@@ -142,9 +142,13 @@ public class Player implements ActionListener, KeyListener {
 	public int getTurn() {
 		return _turn;
 	}
-
+	public int getScore()
+	{
+		return _score;
+	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		_score++;
 		_xPosition += _xTemp;
 		_yPosition += _yTemp;
 		checkIntersectionsAndSetMoves();

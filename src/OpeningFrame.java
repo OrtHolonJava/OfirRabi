@@ -1,3 +1,5 @@
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -8,6 +10,8 @@ public class OpeningFrame extends JFrame {
 	public OpeningFrame() {
 		OpeningPanel panel = new OpeningPanel();
 		add(panel);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-17*40/2, dim.height/2-17*40/2);
 		addMouseListener(new MouseListener() {
 
 			@Override
@@ -18,7 +22,6 @@ public class OpeningFrame extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				System.out.println(e.getX() + "," + e.getY());
 				if (e.getX() > 250 && e.getX() < 440)// button pressed
 				{
 					if (e.getY() > 350 && e.getY() < 410)// play

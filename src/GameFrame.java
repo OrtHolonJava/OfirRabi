@@ -1,4 +1,7 @@
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame implements PlayerMovedInterface {
@@ -7,6 +10,8 @@ public class GameFrame extends JFrame implements PlayerMovedInterface {
 	private Player _p;
 	private Rival _r;
 	public GameFrame() {
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-17*40/2, dim.height/2-17*40/2);
 		_game = new GamePanel();
 		_p=new Player();
 		_p.addListner(_game);

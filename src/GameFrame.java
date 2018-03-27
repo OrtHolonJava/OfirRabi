@@ -22,6 +22,7 @@ public class GameFrame extends JFrame implements PlayerMovedInterface {
 		_game.setPlayer(_p);
 		_game.setRival(_r);
 		this.addKeyListener(_p);
+		this.addKeyListener(_r);
 		add(_game);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(17*40, 17*40);

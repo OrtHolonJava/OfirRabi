@@ -1,12 +1,14 @@
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
-public class Rival implements ActionListener {
+public class Rival implements ActionListener,KeyListener {
 	private int _xPosition = 0;// the x position of the player
 	private int _yPosition = 13 * GamePanel._blockSize;// the y position of the player
 	private Img _image;// the image of the player
@@ -16,14 +18,14 @@ public class Rival implements ActionListener {
 	private Player _player;
 	private Timer _playerTimer;// the player timer
 
-	private int _fps = 60;// the players' speed
+	private int _fps = 50;// the players' speed
 
 	public Rival(Player p) {
 		_image = new Img("WalkingPlayerForward//", _xPosition, _yPosition, 40, 40);// setting the first image
 		_listeners = new LinkedList<PlayerMovedInterface>();// initialize the listeners list
 		_player = p;
 		_playerTimer = new Timer(1000 / _fps, this);
-		_playerTimer.start();
+		//_playerTimer.start();
 	}
 
 	public void addListner(PlayerMovedInterface p) {
@@ -89,12 +91,40 @@ public class Rival implements ActionListener {
 			_player.getTimer().stop();
 			_playerTimer.stop();
 		}
-		if(_player.getTurn()%250==0)
+		if(_player.getTurn()%100==0)
 		{
 			_fps+=1;
 			_playerTimer.setDelay(1000/_fps);
 			_player.getTimer().setDelay(1000/_fps);
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE&&!_playerTimer.isRunning())
+		{
+			_player.getTimer().start();
+			_playerTimer.start();
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_ESCAPE&&_playerTimer.isRunning())
+		{
+			_player.getTimer().stop();;
+			_playerTimer.stop();
+		}
+		
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

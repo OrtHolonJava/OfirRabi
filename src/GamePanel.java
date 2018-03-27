@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		_objects[11] = new Img("images//SnowButtom.png", 0, 0, _blockSize, _blockSize);
 		_BG=new Img("images//BG.png", 0, 0, _blockSize*17, _blockSize*17);
 		
+		
 	}
 
 	public void setPlayer(Player p) {

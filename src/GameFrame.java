@@ -38,8 +38,10 @@ public class GameFrame extends JFrame implements PlayerMovedInterface {
 	public void playerLost() {
 		// TODO Auto-generated method stub
 		_r.getTimer().stop();
+		_p.getTimer().stop();
 		this.setVisible(false);
 		this.dispose();
+		OverFrame f=new OverFrame(_p.getScore());
 	}
 
 }

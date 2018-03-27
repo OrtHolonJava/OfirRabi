@@ -163,8 +163,6 @@ public class Player implements ActionListener, KeyListener {
 		walk();
 		iMoved();
 		if (_yPosition > 15 * 40 || _yPosition < 0) {
-			System.out.println("done");
-			_playerTimer.stop();
 			for (PlayerMovedInterface p : _listeners) {
 				p.playerLost();
 			}

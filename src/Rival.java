@@ -88,8 +88,9 @@ public class Rival implements ActionListener,KeyListener {
 			walk();
 		}
 		if (_xPosition == _player.getXPosition() && _yPosition == _player.getYPosition()) {
-			_player.getTimer().stop();
-			_playerTimer.stop();
+			for (PlayerMovedInterface p : _listeners) {
+				p.playerLost();
+			}
 		}
 		if(_player.getTurn()%100==0)
 		{

@@ -1,4 +1,6 @@
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.LinkedList;
@@ -124,9 +126,9 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
 		_BG.drawImg(g);
+		
 		if (_stepsToEnd >= 14 * 40) {
-			g.translate(-_myPlayer.getXPosition() + 3 * _blockSize, 0);// tracking
-																		// the
+			g.translate(-_myPlayer.getXPosition() + 3 * _blockSize, 0);// tracking														// the
 			_finishTrack=-_myPlayer.getXPosition()+ 3 * _blockSize;														// player
 		}
 		else
@@ -146,6 +148,10 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 				}
 			}
 		}
+		int fontSize = 30;
+	    g.setFont((new Font("Aharoni", Font.PLAIN, fontSize)));
+		g.setColor(Color.BLACK);
+		g.drawString("score: "+_myPlayer.getScore(),g.getClipBounds().x+5,g.getClipBounds().y+30);
 		_myPlayer.getImage().setImgCords(_myPlayer.getXPosition(), _myPlayer.getYPosition());
 		_myPlayer.getImage().drawImg(g);
 		_rival.getImage().setImgCords(_rival.getXPosition(), _rival.getYPosition());

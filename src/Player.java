@@ -23,15 +23,16 @@ public class Player implements ActionListener, KeyListener {
 	private int _xTemp;// the tempt x changes
 	private int _yTemp;// the tempt y changes
 	private boolean _isAbleToChangeGravity = false;// check if the player can to rotate
-	private int _fps = 50;// the players' speed
+	private int _fps;// the players' speed
 	private LinkedList<Integer> _xPositions;
 	private LinkedList<Integer> _yPositions;
 	private LinkedList<String> _gravities;
 	private int _turn;
 	private boolean _addToList = true;
 	private int _score;
-	public Player() {
-		_score =0;
+	public Player(int fps,int score) {
+		_score =score;
+		_fps=fps;
 		_image = new Img("WalkingPlayerForward//", _xPosition, _yPosition, 40, 40);// setting the first image
 		_playerGravity = "Forward";// setting the usual gravity
 		_listeners = new LinkedList<PlayerMovedInterface>();// initialize the listeners list
@@ -145,6 +146,14 @@ public class Player implements ActionListener, KeyListener {
 	public int getScore()
 	{
 		return _score;
+	}
+	public void setScore(int score)
+	{
+		_score=score;
+	}
+	public int getFps()
+	{
+		return _fps;
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

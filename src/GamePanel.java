@@ -40,7 +40,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		_objects = new Img[12];
 		_objects[1] = new Img("images//Crystal.png", 0, 0, _blockSize, _blockSize);
 		_objects[2] = new Img("images//IceBox.png", 0, 0, _blockSize, _blockSize);
-		_objects[3] = new Img("images//Sign.png", 0, 0, _blockSize, _blockSize);
+		_objects[3] = new Img("images//Sign.png", 0, 0, _blockSize, _blockSize); 
 		_objects[4] = new Img("images//Crate.png", 0, 0, _blockSize, _blockSize);
 		_objects[5] = new Img("images//LeftTile.png", 0, 0, _blockSize, _blockSize);
 		_objects[6] = new Img("images//InsideTile.png", 0, 0, _blockSize, _blockSize);
@@ -80,7 +80,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		// create the random maps list
 		_mapsToShow = new LinkedList<Map>();
 		_startMap = new LinkedList<Integer>();
-		int num=10;
+		int num=1 ;
 		for (int i = 0; i < num; i++) {
 			_mapsToShow.add(_maps[mapToShowNext()]);
 		}
@@ -179,6 +179,7 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 		isFinishedLevel();
 		if (_stepsToEnd <= 0) {
 			_myPlayer.getTimer().stop();
+			QuestionFrame q=new QuestionFrame(_myPlayer.getFps(),_myPlayer.getScore());
 		}
 		repaint();
 	}
@@ -187,5 +188,17 @@ public class GamePanel extends JPanel implements PlayerMovedInterface {
 	public void playerLost() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public void playerAnsweredCurrect() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void playerAnsweredMistake() {
+		// TODO Auto-generated method stub
+		
 	}
 }

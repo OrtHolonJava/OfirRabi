@@ -18,12 +18,13 @@ public class Rival implements ActionListener,KeyListener {
 	private Player _player;
 	private Timer _playerTimer;// the player timer
 
-	private int _fps = 50;// the players' speed
+	private int _fps;// the players' speed
 
-	public Rival(Player p) {
+	public Rival(Player p,int fps) {
 		_image = new Img("WalkingPlayerForward//", _xPosition, _yPosition, 40, 40);// setting the first image
 		_listeners = new LinkedList<PlayerMovedInterface>();// initialize the listeners list
 		_player = p;
+		_fps=fps;
 		_playerTimer = new Timer(1000 / _fps, this);
 		//_playerTimer.start();
 	}
@@ -91,12 +92,6 @@ public class Rival implements ActionListener,KeyListener {
 			for (PlayerMovedInterface p : _listeners) {
 				p.playerLost();
 			}
-		}
-		if(_player.getTurn()%100==0)
-		{
-			_fps+=1;
-			_playerTimer.setDelay(1000/_fps);
-			_player.getTimer().setDelay(1000/_fps);
 		}
 	}
 

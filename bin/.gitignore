@@ -1,8 +1,4 @@
-/HelpPanel.class
-/HelpFrame.class
+/QuestionPanel.class
 /images/
-/HelpFrame$1.class
-/OverPanel.class
-/OverFrame.class
-/Dead/
-/OverFrame$1.class
+/QuestionFrame.class
+/QuestionFrame$1.class

@@ -28,7 +28,7 @@ public class OpeningFrame extends JFrame {
 					{
 						setVisible(false);
 						dispose();
-						GameFrame g = new GameFrame();
+						GameFrame g = new GameFrame(50,0);
 					} else if (e.getY() > 440 && e.getY() < 500)// help
 					{
 						setVisible(false);
@@ -38,7 +38,10 @@ public class OpeningFrame extends JFrame {
 					} else if (e.getY() > 530 && e.getY() < 590)// exit
 					{
 						setVisible(false);
-						dispose();
+						for(int i=0;i<getFrames().length;i++)
+						{
+							getFrames()[i].dispose();
+						}
 					}
 				}
 			}
